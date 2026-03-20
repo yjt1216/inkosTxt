@@ -53,12 +53,10 @@ inkos config set-global \
   --api-key <你的 API Key> \
   --model <模型名>
 
-# 示例：OpenAI
-# inkos config set-global --provider openai --base-url https://api.openai.com/v1 --api-key sk-xxx --model gpt-4o
-# 示例：国内中转站 / 兼容接口
-# inkos config set-global --provider custom --base-url https://your-proxy.com/v1 --api-key sk-xxx --model gpt-4o
-# 示例：Anthropic
-# inkos config set-global --provider anthropic --base-url https://api.anthropic.com --api-key sk-ant-xxx --model claude-sonnet-4-20250514
+# provider: openai / anthropic / custom（兼容 OpenAI 格式的中转站选 custom）
+# base-url: 你的 API 提供商地址
+# api-key: 你的 API Key
+# model: 你的模型名称
 ```
 
 配置保存在 `~/.inkos/.env`，所有项目共享。之后新建项目不用再配。
@@ -90,9 +88,9 @@ INKOS_LLM_MODEL=                                   # 模型名
 给不同 Agent 分配不同模型，按需平衡质量与成本：
 
 ```bash
-# Writer 用 Claude（创意强），Auditor 用 GPT-4o（便宜快速）
-inkos config set-model writer claude-sonnet-4-20250514 --provider anthropic --base-url https://api.anthropic.com --api-key-env ANTHROPIC_API_KEY
-inkos config set-model auditor gpt-4o --provider openai
+# 给不同 agent 配不同模型/提供商
+inkos config set-model writer <model> --provider <provider> --base-url <url> --api-key-env <ENV_VAR>
+inkos config set-model auditor <model> --provider <provider>
 inkos config show-models        # 查看当前路由
 ```
 
@@ -259,6 +257,7 @@ inkos agent "先扫描市场趋势，然后根据结果创建一本新书"
 | `inkos book create` | 创建新书（`--genre`、`--platform`、`--chapter-words`、`--target-chapters`、`--brief <file>` 传入创作简报） |
 | `inkos book update [id]` | 修改书设置（`--chapter-words`、`--target-chapters`、`--status`） |
 | `inkos book list` | 列出所有书籍 |
+| `inkos book delete <id>` | 删除书籍及全部数据（`--force` 跳过确认） |
 | `inkos genre list/show/copy/create` | 查看、复制、创建题材 |
 | `inkos write next [id]` | 完整管线写下一章（`--words` 覆盖字数，`--count` 连写，`-q` 静默模式） |
 | `inkos write rewrite [id] <n>` | 重写第 N 章（恢复状态快照，`--force` 跳过确认，`--words` 覆盖字数） |

@@ -54,12 +54,10 @@ inkos config set-global \
   --api-key <your API key> \
   --model <model name>
 
-# Example: OpenAI
-# inkos config set-global --lang en --provider openai --base-url https://api.openai.com/v1 --api-key sk-xxx --model gpt-4o
-# Example: Anthropic
-# inkos config set-global --lang en --provider anthropic --base-url https://api.anthropic.com --api-key sk-ant-xxx --model claude-sonnet-4-20250514
-# Example: Any OpenAI-compatible endpoint (proxies, local models, etc.)
-# inkos config set-global --lang en --provider custom --base-url https://your-endpoint.com/v1 --api-key sk-xxx --model gpt-4o
+# provider: openai / anthropic / custom (use custom for OpenAI-compatible proxies)
+# base-url: your API provider URL
+# api-key: your API key
+# model: your model name
 ```
 
 `--lang en` sets English as the default writing language for all projects. Saved to `~/.inkos/.env`. New projects just work without extra config.
@@ -94,9 +92,9 @@ Project `.env` overrides global config. Skip it if no override needed.
 Assign different models to different agents — balance quality and cost:
 
 ```bash
-# Writer uses Claude (stronger creative), Auditor uses GPT-4o (cheaper & fast)
-inkos config set-model writer claude-sonnet-4-20250514 --provider anthropic --base-url https://api.anthropic.com --api-key-env ANTHROPIC_API_KEY
-inkos config set-model auditor gpt-4o --provider openai
+# Assign different models/providers to different agents
+inkos config set-model writer <model> --provider <provider> --base-url <url> --api-key-env <ENV_VAR>
+inkos config set-model auditor <model> --provider <provider>
 inkos config show-models        # View current routing
 ```
 
@@ -271,6 +269,7 @@ inkos agent "Create a progression fantasy about a mage who can only use one spel
 | `inkos book create` | Create a new book (`--genre`, `--chapter-words`, `--target-chapters`, `--brief <file>`, `--lang en/zh`) |
 | `inkos book update [id]` | Update book settings (`--chapter-words`, `--target-chapters`, `--status`, `--lang`) |
 | `inkos book list` | List all books |
+| `inkos book delete <id>` | Delete a book and all its data (`--force` to skip confirmation) |
 | `inkos genre list/show/copy/create` | View, copy, or create genres |
 | `inkos write next [id]` | Full pipeline: write next chapter (`--words` to override, `--count` for batch, `-q` quiet mode) |
 | `inkos write rewrite [id] <n>` | Rewrite chapter N (restores state snapshot, `--force` to skip confirmation) |
